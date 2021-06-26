@@ -5,32 +5,69 @@ require('dotenv').config();
     // start by querying 
     await query();
     console.log('done');
-    
+
 })();
 
 async function query() {
-    const esQuery = {};
-    const response = await post(url, createQuery(esQuery));
+    const response = await post('/products-1/_search', createQuery());
     console.log(response);
+
+    const onlyAggs = await post('/products-1/_search', createAggregateQuery());
+    console.log(onlyAggs);
 }
 
 function createQuery(base = {}) {
     let esQuery = {
         ...base,
-        query: {
-            
-        },
-        aggs: {
-            isLeisure: {
-                terms: { field: 'attributes.is_leisure' }
-            },
-            
-            isPro: {
-                terms: { field: 'attributes.is_pro' }
+        "query": {
+            "bool": {
+            "must": [
+                {
+                "term": {
+                    "data.attributes.category": {
+                    "value": 1
+                    }
+                }
+                }
+            ]
             }
-        }
+        },
+        // TODO: Model the aggregation after attributes
+        "aggs": {
+            "year": {
+                "terms": { "field": "data.attributes.year" },
+                "aggs": {
+                    "yearCat": {
+                        "terms": { "field": "data.attributes.category" }
+                    }
+                }
+            },
+            "category": {
+                "terms": { "field": "data.attributes.category" }
+            }
+        }    
     };
 
 
     return esQuery;
+}
+
+function createAggregateQuery() {
+    return {
+      "query": {"match_all": {}}, 
+      "size": 0,
+      "aggs": {
+            "year": {
+                "terms": { "field": "data.attributes.year" },
+                "aggs": {
+                    "yearCat": {
+                        "terms": { "field": "data.attributes.category" }
+                    }
+                }
+            },
+            "category": {
+                "terms": { "field": "data.attributes.category" }
+            }
+        }
+    };
 }
