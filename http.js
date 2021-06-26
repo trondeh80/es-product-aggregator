@@ -1,12 +1,12 @@
 const fetch = require('node-fetch');
-// const API_KEY = process.env.API_KEY;
-console.log('HEADERs: ', createHeaders());
+
+const headers = createHeaders();
 
 function post(url, data) {
     return fetch(createUrl(url), {
         method: 'post',
         body: JSON.stringify(data),
-        headers: createHeaders()
+        headers
     });
 }
 
@@ -14,13 +14,13 @@ function put(url, data) {
     return fetch(createUrl(url), {
         method: 'put',
         body: JSON.stringify(data),
-        headers: createHeaders()
+        headers
     });
 }
 function get(url) {
     return fetch(createUrl(url), {
         method: 'get',
-        headers: createHeaders()
+        headers
     });
 }
 
@@ -31,7 +31,8 @@ function createHeaders() {
     };
 }
 
-const HOST = 'https://es-product-aggretaor-ria.es.eastus2.azure.elastic-cloud.com:9243';
+// const HOST = 'https://es-product-aggretaor-ria.es.eastus2.azure.elastic-cloud.com:9243';
+const HOST = 'https://api.elastic-cloud.com/api/v1/deployments';
 function createUrl(urlEndpoint) {
     return `${HOST}${urlEndpoint}`;
 }

@@ -10,10 +10,12 @@ const { post } = require('./http');
 
 async function query() {
     const response = await post('/products-1/_search', createQuery());
-    console.log(response);
+    const queryJson = await response.json();
+    console.log(queryJson);
 
     const onlyAggs = await post('/products-1/_search', createAggregateQuery());
-    console.log(onlyAggs);
+    const onlyAggsJson = await onlyAggs.json();
+    console.log(onlyAggsJson);
 }
 
 function createQuery(base = {}) {
