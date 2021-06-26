@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 // const API_KEY = process.env.API_KEY;
+console.log('HEADERs: ', createHeaders());
 
-export function post(url, data) {
+function post(url, data) {
     return fetch(createUrl(url), {
         method: 'post',
         body: JSON.stringify(data),
@@ -9,15 +10,14 @@ export function post(url, data) {
     });
 }
 
-export function put(url, data) {
+function put(url, data) {
     return fetch(createUrl(url), {
         method: 'put',
         body: JSON.stringify(data),
         headers: createHeaders()
     });
 }
-
-export function get(url) {
+function get(url) {
     return fetch(createUrl(url), {
         method: 'get',
         headers: createHeaders()
@@ -27,7 +27,7 @@ export function get(url) {
 function createHeaders() {
     return {
         'Content-Type': 'application/json',
-        'Authentication': `Bearer ${process.env.API_KEY}`
+        'Authorization': `ApiKey ${process.env.API_KEY}`
     };
 }
 
@@ -35,3 +35,9 @@ const HOST = 'https://es-product-aggretaor-ria.es.eastus2.azure.elastic-cloud.co
 function createUrl(urlEndpoint) {
     return `${HOST}${urlEndpoint}`;
 }
+
+module.exports = {
+    get,
+    post,
+    put
+};

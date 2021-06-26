@@ -1,5 +1,5 @@
-const { post } = require('./http');
 require('dotenv').config();
+const { post } = require('./http');
 
 (async () => {
     // start by querying 
